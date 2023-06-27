@@ -180,7 +180,7 @@ def median_filter_adapt(image, kernel_size):
 
 
 if __name__ == '__main__':
-    img = cv2.imread("imgs/b.png")
+    img = cv2.imread("imgs/c.png")
     median_filter_adapt(img, (5, 5))
     pass
     # img = cv2.imread("imgs/a.png")
