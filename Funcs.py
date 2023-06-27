@@ -172,6 +172,8 @@ def median_filter_adapt(image, kernel_size):
             end_col = min(cols, j + kernel_cols // 2 + 1)
 
             window = image[start_row:end_row, start_col:end_col]
+            temp_std = np.std(window)
+            print(temp_std)
             filtered_image[i, j] = np.median(window, axis=(0, 1))
 
     return filtered_image
@@ -179,7 +181,7 @@ def median_filter_adapt(image, kernel_size):
 
 if __name__ == '__main__':
     img = cv2.imread("imgs/a.png")
-    median_filter_diamond(img, 5)
+    median_filter_adapt(img, (5, 5))
     pass
     # img = cv2.imread("imgs/a.png")
     # # 读取原始图像
