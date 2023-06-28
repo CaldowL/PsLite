@@ -1,5 +1,6 @@
 import math
 
+import cv2
 import numpy as np
 
 
@@ -92,8 +93,38 @@ import numpy as np
 #                 bit_sequence = ""  # 重新开始一个新的序列
 
 
-def read_bytes():
-    with open("output.bin", "rb") as file:
+# def read_bytes():
+#     with open("output.bin", "rb") as file:
+#         byte_data = file.read(2)
+#         s = "".join([bin(i)[2:].zfill(8) for i in byte_data])
+#         rows = int(s, 2)
+#
+#         byte_data = file.read(2)
+#         s = "".join([bin(i)[2:].zfill(8) for i in byte_data])
+#         cols = int(s, 2)
+#
+#         byte_data = file.read(1)
+#         s = "".join([bin(i)[2:].zfill(8) for i in byte_data])
+#         kernel = int(s, 2)
+#
+#         byte_data = file.read()  # 读取整个文件为字节数据
+#         image = ""
+#         bit_sequence = ""
+#         for byte in byte_data:
+#             byte_str = bin(byte)[2:].zfill(8)  # 将每个字节转换为二进制字符串
+#
+#             for bit in byte_str:
+#                 bit_sequence += bit  # 将每个位添加到序列中
+#
+#                 if len(bit_sequence) == 8:
+#                     print(bit_sequence)
+#                     image += bit_sequence
+#                     bit_sequence = ""  # 重新开始一个新的序列
+#     return rows, cols, kernel, [int(i) for i in image]
+
+
+def image_read(file_name):
+    with open(file_name, "rb") as file:
         byte_data = file.read(2)
         s = "".join([bin(i)[2:].zfill(8) for i in byte_data])
         rows = int(s, 2)
@@ -106,19 +137,31 @@ def read_bytes():
         s = "".join([bin(i)[2:].zfill(8) for i in byte_data])
         kernel = int(s, 2)
 
-        byte_data = file.read()  # 读取整个文件为字节数据
         image = ""
-        bit_sequence = ""
+        byte_data = file.read(int(rows * cols / 8))
         for byte in byte_data:
-            byte_str = bin(byte)[2:].zfill(8)  # 将每个字节转换为二进制字符串
+            byte_str = bin(byte)[2:].zfill(8)
+            image += byte_str
 
-            for bit in byte_str:
-                bit_sequence += bit  # 将每个位添加到序列中
+        gray = []
+        byte_data = file.read()
+        for byte in byte_data:
+            byte_str = bin(byte)[2:].zfill(8)
+            gray.append(int(byte_str, 2))
 
-                if len(bit_sequence) == 8:
-                    print(bit_sequence)
-                    image += bit_sequence
-                    bit_sequence = ""  # 重新开始一个新的序列
-    return rows, cols, kernel, [int(i) for i in image]
+    return rows, cols, kernel, [int(i) for i in image], gray
 
 
+r, c, k, img, g = image_read("output.dat")
+print(len(g))
+index_gray = 0
+img = np.reshape(img, (r, c))
+for i in range(0, r, k):
+    for j in range(0, c, k):
+        window = img[i:i + k, j:j + k]
+        a0 = g[index_gray]
+        a1 = g[index_gray + 1]
+        index_gray += 2
+        window = np.where(window == 1, a1, a0)
+        img[i:i + k, j:j + k] = window
+cv2.imwrite("f.bmp", img)
