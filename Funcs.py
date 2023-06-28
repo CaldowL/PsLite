@@ -299,9 +299,9 @@ def image_encode_square(image: np.ndarray, kernel: int, file_name: str = "output
 
 def image_unzip_read(file_name):
     """
-    按字节读dat文件内数据，前2字节为宽度，其次2字节为高度，其次1字节为
-    :param file_name:
-    :return:
+    按字节读入文件
+    :param file_name: 读入的文件名
+    :return: 宽度，高度，方块大小，比特面，重建灰度值
     """
     with open(file_name, "rb") as file:
         byte_data = file.read(2)
@@ -332,6 +332,13 @@ def image_unzip_read(file_name):
 
 
 def image_decode_square(file_name, out_file_name):
+    """
+    图片解码
+    :param file_name:需要解码的文件名
+    :param out_file_name:输出的文件名
+    :return:None
+    """
+    assert file_name.split(".")[-1] == "dat", "文件类型选择错误"
     r, c, k, img, g = image_unzip_read(file_name)
     index_gray = 0
     img = np.reshape(img, (r, c))

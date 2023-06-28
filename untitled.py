@@ -35,7 +35,7 @@ class Ui_Form(object):
         self.pushButton_4.setGeometry(QtCore.QRect(10, 290, 161, 61))
         self.pushButton_4.setObjectName("pushButton_4")
         self.horizontalSlider = QtWidgets.QSlider(self.groupBox)
-        self.horizontalSlider.setGeometry(QtCore.QRect(10, 400, 311, 22))
+        self.horizontalSlider.setGeometry(QtCore.QRect(10, 690, 311, 22))
         self.horizontalSlider.setMinimum(3)
         self.horizontalSlider.setMaximum(15)
         self.horizontalSlider.setSingleStep(2)
@@ -44,19 +44,19 @@ class Ui_Form(object):
         self.horizontalSlider.setTickInterval(1)
         self.horizontalSlider.setObjectName("horizontalSlider")
         self.label_2 = QtWidgets.QLabel(self.groupBox)
-        self.label_2.setGeometry(QtCore.QRect(90, 440, 171, 61))
+        self.label_2.setGeometry(QtCore.QRect(90, 730, 171, 61))
         font = QtGui.QFont()
         font.setPointSize(16)
         self.label_2.setFont(font)
         self.label_2.setObjectName("label_2")
         self.label_3 = QtWidgets.QLabel(self.groupBox)
-        self.label_3.setGeometry(QtCore.QRect(20, 440, 51, 61))
+        self.label_3.setGeometry(QtCore.QRect(20, 730, 51, 61))
         font = QtGui.QFont()
         font.setPointSize(16)
         self.label_3.setFont(font)
         self.label_3.setObjectName("label_3")
         self.horizontalSlider_2 = QtWidgets.QSlider(self.groupBox)
-        self.horizontalSlider_2.setGeometry(QtCore.QRect(10, 360, 311, 22))
+        self.horizontalSlider_2.setGeometry(QtCore.QRect(10, 650, 311, 22))
         self.horizontalSlider_2.setMinimum(3)
         self.horizontalSlider_2.setMaximum(15)
         self.horizontalSlider_2.setSingleStep(2)
@@ -67,6 +67,12 @@ class Ui_Form(object):
         self.comboBox = QtWidgets.QComboBox(self.groupBox)
         self.comboBox.setGeometry(QtCore.QRect(180, 300, 151, 41))
         self.comboBox.setObjectName("comboBox")
+        self.pushButton_5 = QtWidgets.QPushButton(self.groupBox)
+        self.pushButton_5.setGeometry(QtCore.QRect(10, 380, 131, 61))
+        self.pushButton_5.setObjectName("pushButton_5")
+        self.pushButton_6 = QtWidgets.QPushButton(self.groupBox)
+        self.pushButton_6.setGeometry(QtCore.QRect(200, 380, 131, 61))
+        self.pushButton_6.setObjectName("pushButton_6")
         self.label = QtWidgets.QLabel(Form)
         self.label.setGeometry(QtCore.QRect(10, 130, 531, 541))
         self.label.setStyleSheet("background-color:#dadada;")
@@ -89,6 +95,8 @@ class Ui_Form(object):
         self.pushButton_4.clicked.connect(Form.median_filter) # type: ignore
         self.horizontalSlider.sliderMoved['int'].connect(Form.setValue2) # type: ignore
         self.horizontalSlider_2.sliderMoved['int'].connect(Form.setValue) # type: ignore
+        self.pushButton_5.clicked.connect(Form.square_zip) # type: ignore
+        self.pushButton_6.clicked.connect(Form.square_unzip) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
@@ -102,6 +110,8 @@ class Ui_Form(object):
         self.pushButton_4.setText(_translate("Form", "中值滤波"))
         self.label_2.setText(_translate("Form", "(3,3)"))
         self.label_3.setText(_translate("Form", "核:"))
+        self.pushButton_5.setText(_translate("Form", "方块压缩编码"))
+        self.pushButton_6.setText(_translate("Form", "方块压缩恢复"))
         self.label.setText(_translate("Form", "原图预览"))
         self.label_4.setText(_translate("Form", "效果图预览"))
         self.label_5.setText(_translate("Form", "状态栏"))

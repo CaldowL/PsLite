@@ -13,6 +13,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtWidgets import QFileDialog
 
 import FuncsAPI
+import Funcs
 import Utils
 import untitled
 from Utils import *
@@ -112,6 +113,15 @@ class Form(QMainWindow, untitled.Ui_Form):
     def gray_reversal(self):
         if model.file_select_path == "":
             return
+
+    def square_zip(self):
+        file_path, _ = QFileDialog.getOpenFileName(self, "选择图像", "", "图片(*.png *.jpg *.bmp)")
+        assert file_path != "", "请选择文件"
+        ThreadWithException()
+
+    def square_unzip(self):
+        file_path, _ = QFileDialog.getOpenFileName(self, "选择压缩文件", "", "压缩文件(*.dat)")
+        assert file_path != "", "请选择文件"
 
     def setValue(self, value):
         model.slider_value1 = value if value % 2 != 0 else value - 1

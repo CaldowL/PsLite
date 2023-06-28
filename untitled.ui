@@ -97,7 +97,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>400</y>
+      <y>690</y>
       <width>311</width>
       <height>22</height>
      </rect>
@@ -125,7 +125,7 @@
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>440</y>
+      <y>730</y>
       <width>171</width>
       <height>61</height>
      </rect>
@@ -143,7 +143,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>440</y>
+      <y>730</y>
       <width>51</width>
       <height>61</height>
      </rect>
@@ -161,7 +161,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>360</y>
+      <y>650</y>
       <width>311</width>
       <height>22</height>
      </rect>
@@ -193,6 +193,32 @@
       <width>151</width>
       <height>41</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_5">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>380</y>
+      <width>131</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>方块压缩编码</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_6">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>380</y>
+      <width>131</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>方块压缩恢复</string>
     </property>
    </widget>
   </widget>
@@ -325,7 +351,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>1150</x>
-     <y>396</y>
+     <y>700</y>
     </hint>
     <hint type="destinationlabel">
      <x>1109</x>
@@ -341,11 +367,43 @@
    <hints>
     <hint type="sourcelabel">
      <x>1172</x>
-     <y>436</y>
+     <y>681</y>
     </hint>
     <hint type="destinationlabel">
      <x>1115</x>
      <y>443</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_5</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>square_zip()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1138</x>
+     <y>419</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1114</x>
+     <y>481</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_6</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>square_unzip()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1329</x>
+     <y>422</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1114</x>
+     <y>509</y>
     </hint>
    </hints>
   </connection>
@@ -357,5 +415,7 @@
   <slot>median_filter()</slot>
   <slot>setValue()</slot>
   <slot>setValue2()</slot>
+  <slot>square_zip()</slot>
+  <slot>square_unzip()</slot>
  </slots>
 </ui>
