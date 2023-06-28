@@ -54,6 +54,12 @@ def median_filter(image, kernel_size=3):
 
 
 def median_filter_square(image, kernel_size=(3, 3)):
+    """
+    中值滤波，矩形框
+    :param image:
+    :param kernel_size:
+    :return:
+    """
     rows, cols = image.shape[:2]
     filtered_image = np.zeros_like(image)
     kernel_rows, kernel_cols = kernel_size
@@ -72,6 +78,12 @@ def median_filter_square(image, kernel_size=(3, 3)):
 
 
 def median_filter_circle2(image, kernel_r):
+    """
+
+    :param image:
+    :param kernel_r:
+    :return:
+    """
     rows, cols = image.shape[:2]
     filtered_image = np.zeros_like(image)
 
@@ -118,6 +130,12 @@ def median_filter_circle2(image, kernel_r):
 
 
 def median_filter_circle(image, kernel_r):
+    """
+    中值滤波，圆形掩膜
+    :param image: np.ndarray
+    :param kernel_r: int
+    :return: np.ndarray
+    """
     rows, cols = image.shape[:2]
     filtered_image = np.zeros_like(image)
 
@@ -138,6 +156,12 @@ def median_filter_circle(image, kernel_r):
 
 
 def median_filter_diamond(image, kernel_r):
+    """
+    中值滤波，菱形框
+    :param image: np.ndarray
+    :param kernel_r: int
+    :return: np.ndarray
+    """
     rows, cols = image.shape[:2]
     filtered = np.zeros_like(image)
 
@@ -160,6 +184,12 @@ def median_filter_diamond(image, kernel_r):
 
 
 def median_filter_adapt(image, kernel_size):
+    """
+    自适应滤波
+    :param image: np.ndarray
+    :param kernel_size: tuple(int)
+    :return:
+    """
     rows, cols = image.shape[:2]
     filtered_image = np.zeros_like(image)
     kernel_rows, kernel_cols = kernel_size

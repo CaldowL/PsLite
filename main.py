@@ -7,6 +7,7 @@ import traceback
 import win32api
 import win32con
 import win32gui
+from PyQt5 import QtCore
 
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtWidgets import QFileDialog
