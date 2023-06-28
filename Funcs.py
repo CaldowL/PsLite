@@ -224,7 +224,7 @@ if __name__ == '__main__':
     cv2.imshow("Filtered Image", filtered_image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
-    pass
+
     # img = cv2.imread("imgs/a.png")
     # # 读取原始图像
     # img = cv2.imread('E:/Projects/Python/PsLite/imgs/a.png', cv2.COLOR_BGR2HSV)
