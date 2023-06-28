@@ -183,35 +183,47 @@ def median_filter_diamond(image, kernel_r):
     return filtered
 
 
-def median_filter_adapt(image, kernel_size):
-    """
-    自适应滤波
-    :param image: np.ndarray
-    :param kernel_size: tuple(int)
-    :return:
-    """
-    rows, cols = image.shape[:2]
-    filtered_image = np.zeros_like(image)
-    kernel_rows, kernel_cols = kernel_size
+def adaptive_median_filter(image, window_size, max_window_size):
+    height, width, _ = image.shape
+    filtered_image = np.copy(image)
 
-    for i in range(rows):
-        for j in range(cols):
-            start_row = max(0, i - kernel_rows // 2)
-            end_row = min(rows, i + kernel_rows // 2 + 1)
-            start_col = max(0, j - kernel_cols // 2)
-            end_col = min(cols, j + kernel_cols // 2 + 1)
+    pad_size = window_size // 2
 
-            window = image[start_row:end_row, start_col:end_col]
-            temp_std = np.std(window)
-            print(temp_std)
-            filtered_image[i, j] = np.median(window, axis=(0, 1))
+    for i in range(pad_size, height - pad_size):
+        for j in range(pad_size, width - pad_size):
+            window = image[i - pad_size:i + pad_size + 1, j - pad_size:j + pad_size + 1]
+            window_flat = window.flatten()
+
+            while True:
+                median = np.median(window_flat)
+                max_value = np.max(window_flat)
+                min_value = np.min(window_flat)
+
+                if min_value < median < max_value:
+                    if image[i, j] < min_value or image[i, j] > max_value:
+                        filtered_image[i, j] = median
+                    break
+
+                window_size += 2
+                if window_size <= max_window_size:
+                    pad_size = window_size // 2
+                    window = image[i - pad_size:i + pad_size + 1, j - pad_size:j + pad_size + 1]
+                    window_flat = window.flatten()
+                else:
+                    filtered_image[i, j] = median
+                    break
 
     return filtered_image
 
 
 if __name__ == '__main__':
     img = cv2.imread("imgs/a.png")
-    median_filter_adapt(img, (5, 5))
+    filtered_image = adaptive_median_filter(img, 3, 7)
+
+    cv2.imshow("Original Image", img)
+    cv2.imshow("Filtered Image", filtered_image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
     pass
     # img = cv2.imread("imgs/a.png")
     # # 读取原始图像
