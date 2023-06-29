@@ -330,8 +330,8 @@ def image_encode_square(image: np.ndarray, kernel: int, file_name: str = "output
                 a0 = abs(int(ave - st * math.sqrt(count_1 / count_0)))
                 a1 = abs(int(ave + st * math.sqrt(count_0 / count_1)))
 
-            gray_rebuild.append(a0)
-            gray_rebuild.append(a1)
+            gray_rebuild.append(min(255, a0))
+            gray_rebuild.append(min(255, a1))
 
     filtered_image = filtered_image.flatten().tolist()
     filtered_image = list(map(int, filtered_image))

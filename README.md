@@ -2,24 +2,8 @@
 
 ## PsLite
 
-```python
-import logging
-import sys
-import threading
+<img src="https://caldow.oss-cn-shanghai.aliyuncs.com/typora/image-20230629212154215.png" alt="image-20230629212154215" style="zoom: 50%;" />
 
-import traceback
+<img src="https://caldow.oss-cn-shanghai.aliyuncs.com/typora/image-20230629212601661.png" alt="image-20230629212601661" style="zoom:50%;" />
 
-import win32api
-import win32con
-import win32gui
-from PyQt5 import QtCore
-
-from PyQt5.QtWidgets import QApplication, QMainWindow
-from PyQt5.QtWidgets import QFileDialog
-
-import FuncsAPI
-import Utils
-import untitled
-from Utils import *
-
-```
+<img src="https://caldow.oss-cn-shanghai.aliyuncs.com/typora/image-20230629212706108.png" alt="image-20230629212706108" style="zoom:50%;" />
