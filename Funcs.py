@@ -3,6 +3,7 @@ import os
 
 import cv2
 import numpy as np
+from tqdm import tqdm
 
 
 def origin_histogram(img):
@@ -78,6 +79,47 @@ def median_filter_square(image, kernel_size=(3, 3)):
             filtered_image[i, j] = np.median(window, axis=(0, 1))
 
     return filtered_image
+
+
+def median_filter_adapt(image, window_size, max_window_size):
+    """
+    中值滤波，矩形框
+    :param image:
+    :param kernel_size:
+    :return:
+    """
+    image = image[:, :, 0]
+    rows, cols = image.shape[:2]
+
+    for i in range(rows):
+        for j in range(cols):
+            current_kernel = window_size
+            pix_value = image[i][j]
+            while current_kernel <= max_window_size:
+                start_row = max(0, i - current_kernel // 2)
+                end_row = min(rows, i + current_kernel // 2 + 1)
+                start_col = max(0, j - current_kernel // 2)
+                end_col = min(cols, j + current_kernel // 2 + 1)
+                window = image[start_row:end_row, start_col:end_col]
+
+                f_min = np.min(window)
+                f_max = np.max(window)
+                f_med = np.median(window)
+
+                if f_min < f_med < f_max:  # f_med不是噪声脉冲，窗口内有可用中值
+                    if np.abs(f_med - pix_value) < 10:  # 当前灰度值不是脉冲噪声，保留原始值
+                        image[i][j] = pix_value
+                    else:
+                        image[i][j] = f_med
+                    break
+                else:  # 高密度噪声
+                    if current_kernel == max_window_size:
+                        image[i][j] = pix_value
+                        break
+                    else:
+                        current_kernel += 2
+
+    return image
 
 
 def median_filter_circle2(image, kernel_r):
@@ -251,7 +293,7 @@ def image_zip_write(width: int, height: int, kernel: int, file_name: str, arr_im
             f.write(bytearray([int(s, 2)]))
 
         for s in arr_gray:
-            f.write(bytearray([s]))
+            f.write(bytearray([int(s)]))
 
 
 def image_encode_square(image: np.ndarray, kernel: int, file_name: str = "output.dat"):
@@ -285,8 +327,8 @@ def image_encode_square(image: np.ndarray, kernel: int, file_name: str = "output
                 a0 = ave
                 a1 = ave
             else:
-                a0 = int(ave - st * math.sqrt(count_1 / count_0))
-                a1 = int(ave + st * math.sqrt(count_0 / count_1))
+                a0 = abs(int(ave - st * math.sqrt(count_1 / count_0)))
+                a1 = abs(int(ave + st * math.sqrt(count_0 / count_1)))
 
             gray_rebuild.append(a0)
             gray_rebuild.append(a1)
@@ -340,6 +382,8 @@ def image_decode_square(file_name, out_file_name):
     """
     assert file_name.split(".")[-1] == "dat", "文件类型选择错误"
     r, c, k, img, g = image_unzip_read(file_name)
+    print(len(g))
+    # assert len(g) == r * c / k ** 2, "压缩文件损坏"
     index_gray = 0
     img = np.reshape(img, (r, c))
     for i in range(0, r, k):

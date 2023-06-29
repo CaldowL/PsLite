@@ -1,4 +1,6 @@
 import time
+
+import win32con
 from matplotlib import pyplot as plt
 
 import Utils
@@ -55,7 +57,7 @@ def api_histogram_equalization(window, showDetail=False, color=False):
 
 def api_median_filter(window, kernel_size=(3, 3), kernel_type="矩形框"):
     assert model.file_select_ndarray is not None, "请先选择图片"
-    assert kernel_type in ["矩形框", "圆形框", "菱形框"], "暂不支持此类型"
+    assert kernel_type in ["矩形框", "圆形框", "菱形框", "自适应滤波"], "暂不支持此类型"
     window.set_status(f"开始图像中值滤波  滤波类型：{kernel_type}")
     t = time.time()
     img = model.file_select_ndarray
@@ -65,6 +67,52 @@ def api_median_filter(window, kernel_size=(3, 3), kernel_type="矩形框"):
         img = median_filter_circle(img, kernel_size[0])
     elif kernel_type == "菱形框":
         img = median_filter_diamond(img, kernel_size[0])
+    elif kernel_type == "自适应滤波":
+        img = median_filter_adapt(img, 3, 25)
 
     window.label_4.setPixmap(Utils.img_to_pixmap(img))
     window.set_status(f"图像中值滤波完成,耗时: {round(time.time() - t, 2)}秒")
+
+
+def api_square_encode(window, kernel_size):
+    assert model.file_select_ndarray is not None, "请先选择图片"
+    window.set_status(f"开始图像方块压缩编码")
+    t = time.time()
+    file_name = f"results/{int(t)}.dat"
+    img = model.file_select_ndarray
+    image_encode_square(img, kernel_size, file_name)
+    window.set_status(f"图像方块压缩编码完成,耗时: {round(time.time() - t, 2)}秒")
+
+    size_ori = os.path.getsize(model.file_select_path)
+    size_zip = os.path.getsize(file_name)
+    msg = "方块编码完成\n"
+    msg += f"压缩文件位置: {file_name}\n"
+    msg += f"原文件大小: {size_ori} Bytes\n"
+    msg += f"压缩后文件大小: {size_zip} Bytes\n"
+    msg += f"文件压缩比: {round(size_ori / size_zip, 2)}\n"
+    msg += f"文件压缩率: {round(size_zip * 100 / size_ori, 2)} %\n"
+    msg += "点击确认打开文件夹\n"
+
+    if Utils.show_information(msg, True) == 1:
+        os.system(rf"explorer /select,{os.path.abspath(file_name)}")
+
+
+def api_square_decode(window, file_path):
+    window.set_status(f"开始图像方块压缩解码")
+    t = time.time()
+    file_name = f"results/{int(t)}.bmp"
+    image_decode_square(file_path, file_name)
+
+    window.set_status(f"图像方块压缩解码完成,耗时: {round(time.time() - t, 2)}秒")
+
+    img = cv2.imread(file_name)
+    model.file_select_ndarray = img
+    window.label_4.setScaledContents(True)
+    window.label_4.setPixmap(Utils.img_to_pixmap(img))
+
+    msg = "方块解码完成\n"
+    msg += f"解压后文件位置: {file_name}\n"
+    msg += "点击确认打开文件夹\n"
+
+    if Utils.show_information(msg, True) == 1:
+        os.system(rf"explorer /select,{os.path.abspath(file_name)}")

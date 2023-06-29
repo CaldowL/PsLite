@@ -9,6 +9,10 @@ import numpy as np
 import requests
 import numpy
 import time
+
+import win32api
+import win32con
+import win32gui
 from PyQt5.QtGui import QImage, QPixmap
 
 import model
@@ -143,3 +147,15 @@ def hsitorgb(hsi_img):
             bgr_img[i, j, 1] = int(G * 255)
             bgr_img[i, j, 2] = int(R * 255)
     return bgr_img
+
+
+def show_exception(e):
+    hwnd = win32gui.GetDesktopWindow()
+    win32api.MessageBox(hwnd, str(e), "警告", win32con.MB_OK | win32con.MB_ICONERROR)
+
+
+def show_information(e, confirm=False):
+    hwnd = win32gui.GetDesktopWindow()
+    if confirm:
+        return win32api.MessageBox(hwnd, str(e), "提示", win32con.MB_OKCANCEL | win32con.MB_ICONINFORMATION)
+    win32api.MessageBox(hwnd, str(e), "提示", win32con.MB_OK | win32con.MB_ICONINFORMATION)
