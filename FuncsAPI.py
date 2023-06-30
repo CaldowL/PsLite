@@ -111,6 +111,7 @@ def api_square_decode(window, file_path):
     window.label_4.setPixmap(Utils.img_to_pixmap(img))
 
     msg = "方块解码完成\n"
+    msg += f"PSNR: {round(calculate_psnr(cv2.imread(model.file_select_path, 0), cv2.imread(file_name, 0)), 2)}\n"
     msg += f"解压后文件位置: {file_name}\n"
     msg += "点击确认打开文件夹\n"
 

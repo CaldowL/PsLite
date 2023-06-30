@@ -139,9 +139,11 @@ def image_decode_square(file_name, out_file_name):
     cv2.imwrite(out_file_name, img)
 
 
-if __name__ == '__main__':
-    img = cv2.imread("imgs/HOUSE1.BMP")
-    image_encode_square(img, 4, "output.dat")
-    print("压缩完成")
-    image_decode_square("output.dat", "out.bmp")
-    print("解压完成")
+# if __name__ == '__main__':
+#     img = cv2.imread("imgs/HOUSE1.BMP")
+#     image_encode_square(img, 4, "output.dat")
+#     print("压缩完成")
+#     image_decode_square("output.dat", "out.bmp")
+#     print("解压完成")
+
+print(np.square(3))

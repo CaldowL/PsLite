@@ -68,7 +68,7 @@ def median_filter_square(image, kernel_size=(3, 3)):
     filtered_image = np.zeros_like(image)
     kernel_rows, kernel_cols = kernel_size
 
-    for i in range(rows):
+    for i in tqdm(range(rows)):
         for j in range(cols):
             start_row = max(0, i - kernel_rows // 2)
             end_row = min(rows, i + kernel_rows // 2 + 1)
@@ -91,7 +91,7 @@ def median_filter_adapt(image, window_size, max_window_size):
     image = image[:, :, 0]
     rows, cols = image.shape[:2]
 
-    for i in range(rows):
+    for i in tqdm(range(rows)):
         for j in range(cols):
             current_kernel = window_size
             pix_value = image[i][j]
@@ -132,7 +132,7 @@ def median_filter_circle2(image, kernel_r):
     rows, cols = image.shape[:2]
     filtered_image = np.zeros_like(image)
 
-    for i in range(rows):
+    for i in tqdm(range(rows)):
         for j in range(cols):
             start_row = max(0, i - kernel_r)
             end_row = min(rows, i + kernel_r + 1)
@@ -191,7 +191,7 @@ def median_filter_circle(image, kernel_r):
     i, j = np.indices((kernel_r * 2 + 1, kernel_r * 2 + 1))
     mask = (i - kernel_r) ** 2 + (j - kernel_r) ** 2 <= kernel_r ** 2
 
-    for i in range(rows):
+    for i in tqdm(range(rows)):
         for j in range(cols):
             window = padded_img[i:i + (kernel_r * 2 + 1), j:j + (kernel_r * 2 + 1)]
             window_circle = window[mask]
@@ -219,7 +219,7 @@ def median_filter_diamond(image, kernel_r):
     mask = np.logical_not(
         np.logical_xor(np.flip(np.logical_xor(np.flip(mask), mask), axis=1), np.logical_xor(np.flip(mask), mask)))
 
-    for i in range(rows):
+    for i in tqdm(range(rows)):
         for j in range(cols):
             window = padded_img[i:i + (kernel_r * 2 + 1), j:j + (kernel_r * 2 + 1)]
             window = window[mask]
@@ -234,7 +234,7 @@ def adaptive_median_filter(image, window_size, max_window_size):
 
     pad_size = window_size // 2
 
-    for i in range(pad_size, height - pad_size):
+    for i in tqdm(range(pad_size, height - pad_size)):
         for j in range(pad_size, width - pad_size):
             window = image[i - pad_size:i + pad_size + 1, j - pad_size:j + pad_size + 1]
             window_flat = window.flatten()
@@ -397,14 +397,19 @@ def image_decode_square(file_name, out_file_name):
     cv2.imwrite(out_file_name, img)
 
 
-if __name__ == '__main__':
-    img = cv2.imread("imgs/a.png")
-    filtered_image = adaptive_median_filter(img, 3, 7)
+def calculate_psnr(img_i: np.ndarray, img_k: np.ndarray):
+    rows, cols = min(img_i.shape[0], img_i.shape[1]), min(img_i.shape[1], img_i.shape[1])
+    # print(rows, cols)
+    img_i = img_i[0:rows, 0:cols]
+    img_k = img_k[0:rows, 0:cols]
+    mse = np.sum(np.square(img_i - img_k)) / (rows * cols)
+    return 10 * math.log10(255 ** 2 / mse)
 
-    cv2.imshow("Original Image", img)
-    cv2.imshow("Filtered Image", filtered_image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+
+if __name__ == '__main__':
+    img_i = cv2.imread("imgs/HOUSE1.BMP", 0)
+    img_k = cv2.imread("results/1688045149.bmp", 0)
+    print(calculate_psnr(img_i, img_k))
 
     # img = cv2.imread("imgs/a.png")
     # # 读取原始图像
